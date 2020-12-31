@@ -1,0 +1,28 @@
+type Query {
+
+
+type Mutation {
+    login(email: String!, password: String!): User
+}
+
+type Person {
+    id: ID
+    firstName: String
+    lastName: String
+    avatar: String
+    email: String
+    title: String
+    employmentDate: Date
+    telephoneNumber: String
+    reviews: [StudyMaterialReview]
+    reviewCount: Int
+    skills(size: Int, sort: PersonSkillSort): [PersonHiscore]
+    roles: [String]
+    teams(withUnapproved: Boolean): [TeamMember]
+    teamCount: Int
+}
+
+type User {
+    token: String
+    person: Person
+}
