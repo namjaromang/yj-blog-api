@@ -1,10 +1,9 @@
 package com.blog.api.user;
 
-import lombok.*;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
+import javax.persistence.*;
+import lombok.*;
 
 @Entity
 @Getter
@@ -25,14 +24,14 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "username" , nullable = false)
+    @Column(name = "username", nullable = false)
     private String username;
 
     @Column(name = "isEnable", nullable = false)
     @Builder.Default
     private boolean isEnable = true;
 
-    @Column(name = "withDraw" , nullable = false)
+    @Column(name = "withDraw", nullable = false)
     @Builder.Default
     private boolean withDraw = false;
 
@@ -43,12 +42,16 @@ public class User {
 
     @Column(name = "last_login_dt", insertable = false, updatable = false, nullable = false)
     private LocalDateTime lastLoginAt;
+
     @Column(name = "create_dt", insertable = false, updatable = false, nullable = false)
     private LocalDateTime createAt;
+
     @Column(name = "create_user_id", updatable = false, nullable = false)
     private long createUserId;
+
     @Column(name = "update_dt", insertable = false, updatable = false, nullable = false)
     private LocalDateTime updateAt;
+
     @Column(name = "update_user_id", nullable = false)
     private long updateUserId;
 

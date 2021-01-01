@@ -8,4 +8,3 @@ public final class StreamUtils {
         return collection == null || collection.isEmpty() ? Stream.empty() : collection.stream();
     }
 }
-

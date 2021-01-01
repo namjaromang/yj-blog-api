@@ -1,8 +1,7 @@
 package com.blog.api.user;
 
-import lombok.RequiredArgsConstructor;
-
 import java.text.MessageFormat;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class UserAlreadyExistsException extends RuntimeException {

@@ -1,6 +1,8 @@
 plugins {
     id 'org.springframework.boot' version '2.4.1'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id "com.diffplug.spotless" version "5.0.0"
+    id "org.jetbrains.gradle.plugin.idea-ext" version "0.7"
     id 'java'
 }
 
@@ -39,4 +41,33 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+
+spotless {
+    java {
+        targetExclude("src/main/generated/**")
+        googleJavaFormat("1.7").aosp()
+
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
+        endWithNewline()
+
+        importOrder ''
+    }
+}
+
+task installGitHooks(type: Copy) {
+    from new File(rootProject.rootDir, 'pre-commit')
+    into { new File(rootProject.rootDir, '.git/hooks') }
+    fileMode 0777
+}
+
+build.dependsOn installGitHooks
+
+idea.project.settings {
+    taskTriggers {
+        afterSync tasks.getByName("installGitHooks")
+    }
 }

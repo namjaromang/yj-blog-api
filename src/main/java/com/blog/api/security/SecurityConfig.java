@@ -20,10 +20,7 @@ public class SecurityConfig {
 
     @Bean
     public JWTVerifier verifier(SecurityProperties properties, Algorithm algorithm) {
-        return JWT
-            .require(algorithm)
-            .withIssuer(properties.getTokenIssuer())
-            .build();
+        return JWT.require(algorithm).withIssuer(properties.getTokenIssuer()).build();
     }
 
     @Bean
@@ -31,9 +28,9 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(properties.getPasswordStrength());
     }
 
-
     @Bean
-    public AuthenticationProvider authenticationProvider(UserService userService, PasswordEncoder passwordEncoder) {
+    public AuthenticationProvider authenticationProvider(
+            UserService userService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userService);
         provider.setPasswordEncoder(passwordEncoder);

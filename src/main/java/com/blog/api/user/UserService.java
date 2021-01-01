@@ -12,28 +12,23 @@ import com.blog.api.security.SecurityProperties;
 import com.blog.api.userRole.UserRole;
 import com.blog.api.userRole.UserRoleRepository;
 import com.blog.api.utility.StreamUtils;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
-
 
     private final SecurityProperties securityProperties;
     private final Algorithm algorithm;
@@ -46,15 +41,15 @@ public class UserService implements UserDetailsService {
         return userRepository
                 .findByLoginId(loginId)
                 .map(user -> getUserDetails(user, getToken(user)))
-                .orElseThrow(() -> new UsernameNotFoundException("Username or password didn''t match"));
+                .orElseThrow(
+                        () -> new UsernameNotFoundException("Username or password didn''t match"));
     }
 
     @Transactional
     public String getToken(User user) {
         Instant now = Instant.now();
         Instant expiry = Instant.now().plus(securityProperties.getTokenExpiration());
-        return JWT
-                .create()
+        return JWT.create()
                 .withIssuer(securityProperties.getTokenIssuer())
                 .withIssuedAt(Date.from(now))
                 .withExpiresAt(Date.from(expiry))
@@ -72,13 +67,13 @@ public class UserService implements UserDetailsService {
     }
 
     private JWTUserDetails getUserDetails(User user, String token) {
-        return JWTUserDetails
-                .builder()
+        return JWTUserDetails.builder()
                 .username(user.getLoginId())
                 .password(user.getPassword())
-                .authorities(StreamUtils.collectionStream(user.getRoles())
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList()))
+                .authorities(
+                        StreamUtils.collectionStream(user.getRoles())
+                                .map(SimpleGrantedAuthority::new)
+                                .collect(Collectors.toList()))
                 .token(token)
                 .build();
     }
@@ -86,29 +81,32 @@ public class UserService implements UserDetailsService {
     private Optional<DecodedJWT> getDecodedToken(String token) {
         try {
             return Optional.of(jwtVerifier.verify(token));
-        } catch(JWTVerificationException ex) {
+        } catch (JWTVerificationException ex) {
             return Optional.empty();
         }
     }
 
     @Transactional
     public User createUser(CreateUserInput input) {
-            User user = userRepository.save(User.builder()
-                .loginId(input.getLoginId())
-                .password(passwordEncoder.encode(input.getPassword()))
-                    .username(input.getUsername())
-                    .isEnable(true)
-                    .build());
+        User user =
+                userRepository.save(
+                        User.builder()
+                                .loginId(input.getLoginId())
+                                .password(passwordEncoder.encode(input.getPassword()))
+                                .username(input.getUsername())
+                                .isEnable(true)
+                                .build());
 
-            user.setCreateUserId(user.getUserId());
-            user.setUpdateUserId(user.getUserId());
+        user.setCreateUserId(user.getUserId());
+        user.setUpdateUserId(user.getUserId());
 
-        userRoleRepository.save(UserRole.builder()
-            .userId(user.getUserId())
-            .roleTypeId(Const.ROLE_USER)
-            .createUserId(user.getUserId())
-            .updateUserId(user.getUserId())
-            .build());
+        userRoleRepository.save(
+                UserRole.builder()
+                        .userId(user.getUserId())
+                        .roleTypeId(Const.ROLE_USER)
+                        .createUserId(user.getUserId())
+                        .updateUserId(user.getUserId())
+                        .build());
 
         return userRepository.save(user);
     }
