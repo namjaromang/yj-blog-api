@@ -36,3 +36,25 @@ graphql:
 blog:
   passwordStrength : 10
   tokenSecret : NfECoU9_)icgPDx
+
+altair:
+  mapping: /altair
+  endpoint:
+    graphql: /api/graphql
+    subscriptions: /subscriptions
+  subscriptions:
+    timeout: 30
+    reconnect: false
+  static:
+    basePath: /
+  enabled: true
+  pageTitle: Altair
+  cdn:
+    enabled: true
+    version: 2.1.7
+  #  props:
+  #    resources:
+  #      defaultQuery: graphql/defaultQuery.graphql
+  #      variables: variables.graphql
+  headers:
+    Authorization: "Bearer <your-token>"

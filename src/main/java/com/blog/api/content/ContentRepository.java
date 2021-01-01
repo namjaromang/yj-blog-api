@@ -1,4 +1,4 @@
-package com.blog.api.context;
+package com.blog.api.content;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
