@@ -94,7 +94,6 @@ public class UserService implements UserDetailsService {
                                 .loginId(input.getLoginId())
                                 .password(passwordEncoder.encode(input.getPassword()))
                                 .username(input.getUsername())
-                                .isEnable(true)
                                 .build());
 
         user.setCreateUserId(user.getUserId());

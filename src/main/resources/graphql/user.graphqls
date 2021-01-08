@@ -1,0 +1,35 @@
+type User {
+    userId: ID!
+    #로그인 아이디
+    loginId: String!
+    #패스워드
+    password: String
+    #이름
+    username : String
+    #사용여부
+    isEnable: Boolean
+    #탈퇴여부
+    withdraw: String
+    #마지막로그인
+    lastLoginAt: String
+}
+
+input CreateUserInput {
+    #유저아이디
+    loginId: String!
+    #비밀번호
+    password: String!
+    #유저이름
+    username: String!
+}
+extend type Query {
+    userinfo(
+        loginId : Int
+    ):Boolean
+}
+
+extend type Mutation {
+    createUser(
+        data:CreateUserInput!
+    ):User
+}

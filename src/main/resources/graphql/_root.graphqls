@@ -1,0 +1,15 @@
+
+type Query {
+
+}
+
+type Mutation {
+
+}
+
+type ApiResponse{
+    #에러 코드
+    code : String!
+    #에러 메세지
+    message : String!
+}

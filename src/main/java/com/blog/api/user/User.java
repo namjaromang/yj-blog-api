@@ -31,9 +31,9 @@ public class User {
     @Builder.Default
     private boolean isEnable = true;
 
-    @Column(name = "withDraw", nullable = false)
+    @Column(name = "withdraw", nullable = false)
     @Builder.Default
-    private boolean withDraw = false;
+    private boolean withdraw = false;
 
     @ElementCollection
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
