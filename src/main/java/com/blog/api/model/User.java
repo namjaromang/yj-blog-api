@@ -1,4 +1,4 @@
-package com.blog.api.user;
+package com.blog.api.model;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -40,16 +40,16 @@ public class User {
     @Column(name = "roles")
     private Set<String> roles;
 
-    @Column(name = "last_login_dt", insertable = false, updatable = false, nullable = false)
+    @Column(name = "last_login_at", insertable = false, updatable = false, nullable = false)
     private LocalDateTime lastLoginAt;
 
-    @Column(name = "create_dt", insertable = false, updatable = false, nullable = false)
+    @Column(name = "create_at", insertable = false, updatable = false, nullable = false)
     private LocalDateTime createAt;
 
     @Column(name = "create_user_id", updatable = false, nullable = false)
     private long createUserId;
 
-    @Column(name = "update_dt", insertable = false, updatable = false, nullable = false)
+    @Column(name = "update_at", insertable = false, updatable = false, nullable = false)
     private LocalDateTime updateAt;
 
     @Column(name = "update_user_id", nullable = false)

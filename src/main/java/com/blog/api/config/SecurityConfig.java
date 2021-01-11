@@ -1,9 +1,10 @@
-package com.blog.api.security;
+package com.blog.api.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.blog.api.user.UserService;
+import com.blog.api.security.SecurityProperties;
+import com.blog.api.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,8 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfig {
     @Bean
-    public Algorithm jwtAlgorithm(SecurityProperties properties) {
-        return Algorithm.HMAC256(properties.getTokenSecret());
+    public Algorithm jwtAlgorithm(SecurityProperties securityProperties) {
+        return Algorithm.HMAC256(securityProperties.getTokenSecret());
     }
 
     @Bean

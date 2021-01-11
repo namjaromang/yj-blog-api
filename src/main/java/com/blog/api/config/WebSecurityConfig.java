@@ -1,5 +1,7 @@
-package com.blog.api.security;
+package com.blog.api.config;
 
+import com.blog.api.security.JWTFilter;
+import com.blog.api.security.SecurityProperties;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

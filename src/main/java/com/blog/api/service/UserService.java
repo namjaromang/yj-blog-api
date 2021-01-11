@@ -1,4 +1,4 @@
-package com.blog.api.user;
+package com.blog.api.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -6,19 +6,27 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.blog.api.constant.Const;
-import com.blog.api.security.BadTokenException;
+import com.blog.api.exception.BadTokenException;
+import com.blog.api.model.User;
+import com.blog.api.model.UserRole;
+import com.blog.api.payload.request.CreateUserInput;
+import com.blog.api.repository.UserRepository;
+import com.blog.api.repository.UserRoleRepository;
 import com.blog.api.security.JWTUserDetails;
 import com.blog.api.security.SecurityProperties;
-import com.blog.api.userRole.UserRole;
-import com.blog.api.userRole.UserRoleRepository;
 import com.blog.api.utility.StreamUtils;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,7 +69,7 @@ public class UserService implements UserDetailsService {
     public JWTUserDetails loadUserByToken(String token) {
         return getDecodedToken(token)
                 .map(DecodedJWT::getSubject)
-                .flatMap(userRepository::findByLoginId)
+                .flatMap(userRepository::findByLoginIdAndWithdrawFalseAndEnableIsTrue)
                 .map(user -> getUserDetails(user, token))
                 .orElseThrow(BadTokenException::new);
     }
@@ -78,12 +86,33 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    @Transactional
+    public User getCurrentUser() {
+        return Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .map(Authentication::getName)
+                .flatMap(userRepository::findByLoginId)
+                .orElse(null);
+    }
+
+    public boolean isAuthenticated() {
+        return Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .filter(Authentication::isAuthenticated)
+                .filter(Predicate.not(this::isAnonymous))
+                .isPresent();
+    }
+
     private Optional<DecodedJWT> getDecodedToken(String token) {
         try {
             return Optional.of(jwtVerifier.verify(token));
         } catch (JWTVerificationException ex) {
             return Optional.empty();
         }
+    }
+
+    private boolean isAnonymous(Authentication authentication) {
+        return authentication instanceof AnonymousAuthenticationToken;
     }
 
     @Transactional
@@ -102,7 +131,7 @@ public class UserService implements UserDetailsService {
         userRoleRepository.save(
                 UserRole.builder()
                         .userId(user.getUserId())
-                        .roleTypeId(Const.ROLE_USER)
+                        .roles(Const.ROLE_USER)
                         .createUserId(user.getUserId())
                         .updateUserId(user.getUserId())
                         .build());

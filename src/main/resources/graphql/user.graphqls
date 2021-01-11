@@ -12,6 +12,8 @@ type User {
     withdraw: String
     #마지막로그인
     lastLoginAt: String
+    #토큰
+    token: String
 }
 
 input CreateUserInput {
@@ -31,5 +33,10 @@ extend type Query {
 extend type Mutation {
     createUser(
         data:CreateUserInput!
+    ):User
+
+    login(
+        loginId : String!
+        password : String!
     ):User
 }

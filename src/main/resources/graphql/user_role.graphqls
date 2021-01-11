@@ -1,5 +1,5 @@
 type UserRole {
     userRoleId: ID!
     userId: String!
-    roleTypeId: String!
+    roles: String!
 }

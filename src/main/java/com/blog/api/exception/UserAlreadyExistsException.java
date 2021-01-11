@@ -1,4 +1,4 @@
-package com.blog.api.user;
+package com.blog.api.exception;
 
 import java.text.MessageFormat;
 import lombok.RequiredArgsConstructor;

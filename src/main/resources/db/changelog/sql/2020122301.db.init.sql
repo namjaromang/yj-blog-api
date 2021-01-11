@@ -9,7 +9,7 @@ create table user
     username       varchar(50)                            not null,
     is_enable     tinyint(1) default 0                   not null,
     withdraw       tinyint(1) default 0                   not null,
-    last_login_dt  datetime   default current_timestamp() not null,
+    last_login_at  datetime   default current_timestamp() not null,
     create_at      datetime   default current_timestamp() not null,
     create_user_id bigint                                 not null,
     update_at      datetime   default current_timestamp() not null on update current_timestamp(),

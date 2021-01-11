@@ -1,10 +1,9 @@
 package com.blog.api.security;
 
-import static java.util.function.Predicate.not;
-
-import com.blog.api.user.UserService;
+import com.blog.api.service.UserService;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.FilterChain;
@@ -47,7 +46,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
     private Optional<String> getToken(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(AUTHORIZATION_HEADER))
-                .filter(not(String::isEmpty))
+                .filter(Predicate.not(String::isEmpty))
                 .map(BEARER_PATTERN::matcher)
                 .filter(Matcher::find)
                 .map(matcher -> matcher.group(1));

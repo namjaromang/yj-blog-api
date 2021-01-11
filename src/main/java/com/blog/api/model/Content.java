@@ -1,4 +1,4 @@
-package com.blog.api.content;
+package com.blog.api.model;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;

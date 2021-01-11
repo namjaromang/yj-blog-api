@@ -1,4 +1,4 @@
-package com.blog.api.security;
+package com.blog.api.exception;
 
 public class BadTokenException extends RuntimeException {
     private static final long serialVersionUID = 158136221282852553L;

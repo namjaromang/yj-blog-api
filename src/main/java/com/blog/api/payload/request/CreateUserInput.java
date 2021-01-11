@@ -1,4 +1,4 @@
-package com.blog.api.user;
+package com.blog.api.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;

@@ -36,11 +36,12 @@ graphql:
 blog:
   passwordStrength : 10
   tokenSecret : NfECoU9_)icgPDx
+  tokenIssuer : yj-blog-api
 
 altair:
   mapping: /altair
   endpoint:
-    graphql: /api/graphql
+    graphql: /graphql
     subscriptions: /subscriptions
   subscriptions:
     timeout: 30
