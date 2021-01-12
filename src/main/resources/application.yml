@@ -25,7 +25,7 @@ spring:
         order_updates: true
         enable_lazy_load_no_trans: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
 graphql:
   servlet:
     mapping: /graphql
