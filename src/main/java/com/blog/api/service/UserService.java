@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public JWTUserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         return userRepository
-                .findByLoginId(loginId)
+                .findByLoginIdAndWithdrawIsFalse(loginId)
                 .map(user -> getUserDetails(user, getToken(user)))
                 .orElseThrow(
                         () -> new UsernameNotFoundException("Username or password didn''t match"));
@@ -69,7 +69,7 @@ public class UserService implements UserDetailsService {
     public JWTUserDetails loadUserByToken(String token) {
         return getDecodedToken(token)
                 .map(DecodedJWT::getSubject)
-                .flatMap(userRepository::findByLoginIdAndWithdrawFalseAndEnableIsTrue)
+                .flatMap(userRepository::findByLoginIdAndWithdrawIsFalse)
                 .map(user -> getUserDetails(user, token))
                 .orElseThrow(BadTokenException::new);
     }
@@ -91,7 +91,7 @@ public class UserService implements UserDetailsService {
         return Optional.ofNullable(SecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
                 .map(Authentication::getName)
-                .flatMap(userRepository::findByLoginId)
+                .flatMap(userRepository::findByLoginIdAndWithdrawIsFalse)
                 .orElse(null);
     }
 
